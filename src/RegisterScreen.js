@@ -35,7 +35,7 @@ class RegisterScreen extends Component {
                     const result = response.data.result
 
 
-                    if (result == "success") {
+                    if (result == "success "+username) {
                         Alert.alert("Register Successful", "",
                         [
                             { text: 'OK', onPress: () => this.props.navigation.goBack() },
@@ -71,7 +71,7 @@ class RegisterScreen extends Component {
                     keyboardType={'email-address'}
                     autoCapitalize={'none'}
                     autoCorrect={false}
-                    style={styles.input} placeholder="Email">
+                    style={styles.input} placeholder="Username">
                 </TextInput>
                 <TextInput
                     onChangeText={(text) => this.setState({ password: text })}
