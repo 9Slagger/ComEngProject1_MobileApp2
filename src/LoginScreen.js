@@ -60,7 +60,7 @@ class LoginScreen extends Component {
                 if (result.result == "success") {
 
                     // save token
-                    await AsyncStorage.setItem("token", result.data)
+                    await AsyncStorage.setItem("token", result.token)
 
                     // show successful alert
                     Alert.alert("Login Successful", "",
