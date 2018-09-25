@@ -54,10 +54,10 @@ class LoginScreen extends Component {
         const data = { username: username, password: password }
 
 
-        axios.post('http://192.168.1.6:8082/api/v1/customer/login', data)
+        axios.post('https://immense-tundra-42908.herokuapp.com/api/v1/customer/login', data)
             .then(async response => {
                 const result = response.data
-                if (result.result == "success") {
+                if (result.result == "Customer Login success") {
 
                     // save token
                     await AsyncStorage.setItem("token", result.token)
