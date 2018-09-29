@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
-import { View, Text, AsyncStorage, Alert, Button, StyleSheet, TouchableHighlight, FlatList } from 'react-native';
+import { View, Text, AsyncStorage, Alert, StyleSheet, TouchableHighlight, FlatList} from 'react-native';
+import { TabNavigator, TabBarBottom } from 'react-navigation'; // 1.0.0-beta.27
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios'
 import { httpClient } from './HttpClient'
 import { StackActions, NavigationActions } from 'react-navigation';
-import { ListItem } from 'react-native-elements'
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Button } from 'react-native-elements';
+import ProfileScreen from './ProfileScreen'
 
-class HomeScreen extends Component {
-
-  static navigationOptions = {
-    title: 'Home Screen',
-  };
-
+class HomeScreen extends React.Component {
+  // static navigationOptions = {
+  //   title: 'Home Screen'
+  // };
+  
   constructor(props) {
     super(props)
     this.state = {
@@ -19,75 +20,12 @@ class HomeScreen extends Component {
       feedData: '',
       dataSource: this.list
     }
-    this.feed()
-
-    httpClient
-      .get('/feed')
-      .then(result => {
-        Alert.alert(JSON.stringify(result.data))
-      })
-  }
-
-  goHomeScreen() {
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'Home' })],
-    });
-    this.props.navigation.dispatch(resetAction);
-  }
-
-  async logout() {
-    await AsyncStorage.removeItem('token')
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'Login' })],
-    });
-    this.props.navigation.dispatch(resetAction);
-  }
-
-  async feed() {
-    this.state.feedData = {
-      username: "loading...",
-      firstname: "loading...",
-      lastname: "loading...",
-      phone: "loading...",
-      address: "loading...",
-      allergy_history: "loading...",
-      birthday: "loading...",
-      record_date: "loading...",
-    }
-    const token = await AsyncStorage.getItem("token")
-
-    axios.get('https://immense-tundra-42908.herokuapp.com/api/v1/myuser',
-      { headers: { 'x-access-token': token } })
-      .then(response => {
-        const result = response.data
-        this.setState({ feedData: result })
-        console.log(this.state.feedData)
-      })
-      .catch(error => {
-        Alert.alert(JSON.stringify(error))
-        console.log(error);
-      });
   }
 
   render() {
     return (
       <View style={styles.container}>
-
-        <Text style={styles.fronData}> Account: {this.state.feedData.username} </Text>
-        <Text style={styles.fronData}> ชื่อ: {this.state.feedData.firstname} </Text>
-        <Text style={styles.fronData}> นามสกุล: {this.state.feedData.lastname} </Text>
-        <Text style={styles.fronData}> เบอร์โทร: {this.state.feedData.phone} </Text>
-        <Text style={styles.fronData}> ที่อยู่: {this.state.feedData.address} </Text>
-        <Text style={styles.fronData}> ประวัติแพ้ยา: {this.state.feedData.allergy_history} </Text>
-        <Text style={styles.fronData}> วันเกิด: {this.state.feedData.birthday} </Text>
-        <Text style={styles.fronData}> วันที่เป็นสมาชิก: {this.state.feedData.record_date} </Text>
-        <TouchableHighlight
-          onPress={() => this.logout()}
-          style={styles.loginButton}>
-          <Text style={styles.loginButtonText}>Logout</Text>
-        </TouchableHighlight>
+      <Text>Home</Text>
       </View>
     );
   }
@@ -170,5 +108,31 @@ const styles = StyleSheet.create({
   }
 });
 
+export default TabNavigator(
+  {
+    Home: { screen: HomeScreen },
+    Profile: { screen: ProfileScreen },
+  },
+  {
+    navigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === 'Home') {
+          return <Icon name='home' size={25} color='#000000' />
+        } else if (routeName === 'Profile') {
+          return <Icon name='menu' size={25} color='#000000' />
+        }
+      },
+    }),
+    tabBarComponent: TabBarBottom,
+    tabBarPosition: 'bottom',
+    tabBarOptions: {
+      activeTintColor: 'tomato',
+      inactiveTintColor: 'gray',
+    },
+    animationEnabled: false,
+    swipeEnabled: false,
+  }
+);
 
-export default HomeScreen;
