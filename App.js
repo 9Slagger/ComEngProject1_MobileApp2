@@ -92,6 +92,7 @@ AppTabNavigator.navigationOptions = ({ navigation }) => {
 //     </ScrollView>
 //   </SafeAreaView>
 // )
+//
 
 const AppDrawerNavigator = createDrawerNavigator({
   Home: AppStackNavigator
