@@ -1,5 +1,5 @@
 import { AppRegistry } from 'react-native';
-import App from './src/App';
+import App from './App';
 
 console.disableYellowBox=true
 AppRegistry.registerComponent('app_dental_clinic', () => App);
