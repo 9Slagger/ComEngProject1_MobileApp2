@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, AsyncStorage, Alert, StyleSheet, TouchableHighlight, FlatList} from 'react-native';
+import { View, Text, Image, AsyncStorage, Alert, StyleSheet, TouchableHighlight, FlatList } from 'react-native';
+import { Card, ListItem, Button } from 'react-native-elements'
 import { TabNavigator, TabBarBottom } from 'react-navigation'; // 1.0.0-beta.27
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios'
-import { httpClient } from './HttpClient'
+// import { httpClient } from './HttpClient'
 import { StackActions, NavigationActions } from 'react-navigation';
-import { Button } from 'react-native-elements';
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -61,6 +61,8 @@ class ProfileScreen extends Component {
       { headers: { 'x-access-token': token } })
       .then(response => {
         const result = response.data
+        result.birthday = result.birthday.split("T");
+        result.record_date = result.record_date.split("T");
         this.setState({ feedData: result })
         console.log(this.state.feedData)
       })
@@ -72,21 +74,25 @@ class ProfileScreen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View >
 
-        <Text style={styles.fronData}> Account: {this.state.feedData.username} </Text>
-        <Text style={styles.fronData}> ชื่อ: {this.state.feedData.firstname} </Text>
-        <Text style={styles.fronData}> นามสกุล: {this.state.feedData.lastname} </Text>
-        <Text style={styles.fronData}> เบอร์โทร: {this.state.feedData.phone} </Text>
-        <Text style={styles.fronData}> ที่อยู่: {this.state.feedData.address} </Text>
-        <Text style={styles.fronData}> ประวัติแพ้ยา: {this.state.feedData.allergy_history} </Text>
-        <Text style={styles.fronData}> วันเกิด: {this.state.feedData.birthday} </Text>
-        <Text style={styles.fronData}> วันที่เป็นสมาชิก: {this.state.feedData.record_date} </Text>
+        <Card title="My Profile">
+          {<ListItem roundAvatar title={'Account: ' + this.state.feedData.username}/>}
+          {<ListItem roundAvatar title={'Firstname: ' + this.state.feedData.firstname}/>}
+          {<ListItem roundAvatar title={'Lastname: ' + this.state.feedData.lastname}/>}
+          {<ListItem roundAvatar title={'Phone: ' + this.state.feedData.phone}/>}
+          {<ListItem roundAvatar title={'Address: ' + this.state.feedData.address}/>}
+          {<ListItem roundAvatar title={'Allergy: ' + this.state.feedData.allergy_history}/>}
+          {<ListItem roundAvatar title={'Birthday: ' + this.state.feedData.birthday[0]}/>}
+          {<ListItem roundAvatar title={'Join Date: ' + this.state.feedData.record_date[0]}/>}
+        </Card>
+
         <TouchableHighlight
           onPress={() => this.logout()}
           style={styles.loginButton}>
           <Text style={styles.loginButtonText}>Logout</Text>
         </TouchableHighlight>
+
       </View>
     );
   }
