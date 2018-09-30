@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, Dimensions, Image } from 'react-native';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation';
+import LoginScreen from './screens/LoginScreen'
 import HomeScreen from './screens/HomeScreen'
 import SettingsScreen from './screens/SettingsScreen'
 
@@ -25,9 +26,10 @@ const CustomDrawerComponent = (props) => (
 )
 
 const AppDrawerNavigator = createDrawerNavigator({
+  Login: LoginScreen,
   Home: HomeScreen,
   Settings: SettingsScreen
-}, {
+}, { initialRouteName: 'Login' }, {
     contentComponent: CustomDrawerComponent,
     // drawerWidth: width,
     contentOptions: {
